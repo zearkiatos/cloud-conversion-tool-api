@@ -27,5 +27,4 @@ else
 endif
 
 docker-gunicorn:
-	# gunicorn --bind 0.0.0.0:$(port) app:app
 	gunicorn --bind 0.0.0.0:5000 wsgi:app
