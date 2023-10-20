@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  broker:
+    build:
+      context: .
+      dockerfile: redis.Dockerfile
+    container_name: cloud-conversion-tool-broker
+    ports:
+      - "6380:6379"
+    volumes:
+      - ./data/redis/:/data
+  gateway:
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    container_name: cloud-conversion-tool-api
+    volumes:
+      - ".:/app"
+    ports:
+      - "5001:5000"
+    env_file:
+      - .env.dev
+    tty: true
+    depends_on:
+      - broker
+    links:
+      - broker
