@@ -9,6 +9,44 @@ services:
       - "6380:6379"
     volumes:
       - ./data/redis/:/data
+  formatter-api:
+    build:
+      context: ../cloud-conversion-tool-formatter-api/.
+      dockerfile: ../cloud-conversion-tool-formatter-api/dev.Dockerfile
+    container_name: cloud-conversion-tool-formatter-api
+    volumes:
+      - "../cloud-conversion-tool-formatter-api/.:/app"
+    ports:
+      - "8001:8000"
+    env_file:
+      - ../cloud-conversion-tool-formatter-api/.env.dev
+    tty: true
+    depends_on:
+      - broker
+      - db
+    links:
+      - broker
+      - db
+  db:
+    image: postgres
+    env_file:
+      - ../cloud-conversion-tool-formatter-api/.env.db
+    container_name: cloud-conversion-tool-db
+    volumes:
+      - ".../cloud-conversion-tool-formatter-api/data/postgres:/var/lib/postgresql"
+    ports:
+      - "5432:5432"
+  auth-db:
+    image: postgres
+    env_file:
+      - .env.db
+    container_name: auth-db
+    volumes:
+      - "./data/postgres:/var/lib/postgresql"
+    expose:
+      - "5440"
+    ports:
+      - "5440:5440"
   gateway:
     build:
       context: .
@@ -20,8 +58,26 @@ services:
       - "5001:5000"
     env_file:
       - .env.dev
+    restart: always
     tty: true
     depends_on:
       - broker
+      - auth-db
+      - formatter-api
     links:
       - broker
+      - auth-db
+      - formatter-api
+  postgres-ui:
+    image: dpage/pgadmin4
+    env_file:
+      - ../cloud-conversion-tool-formatter-api/.env.pg
+    container_name: pgadmin-web
+    volumes:
+      - ../cloud-conversion-tool-formatter-api/data/pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    links:
+      - db
