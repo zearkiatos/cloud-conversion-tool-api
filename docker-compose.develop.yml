@@ -36,8 +36,6 @@ services:
       - ".../cloud-conversion-tool-formatter-api/data/postgres:/var/lib/postgresql"
     ports:
       - "5432:5432"
-    networks:
-      - default
   auth-db:
     image: postgres
     env_file:
@@ -45,10 +43,10 @@ services:
     container_name: auth-db
     volumes:
       - "./data/postgres:/var/lib/postgresql"
+    expose:
+      - "5440"
     ports:
       - "5440:5440"
-    networks:
-      - default
   gateway:
     build:
       context: .
@@ -60,6 +58,7 @@ services:
       - "5001:5000"
     env_file:
       - .env.dev
+    restart: always
     tty: true
     depends_on:
       - broker
@@ -82,5 +81,3 @@ services:
       - db
     links:
       - db
-    networks:
-      - default

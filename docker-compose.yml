@@ -20,7 +20,7 @@ services:
       - ../cloud-conversion-tool-formatter-api/.env.dev
     tty: true
     depends_on:
-      - broke
+      - broker
       - db
     links:
       - broker
@@ -34,8 +34,6 @@ services:
       - "../cloud-conversion-tool-formatter-api/data/postgres:/var/lib/postgresql"
     ports:
       - "5432:5432"
-    networks:
-      - default
   auth-db:
     image: postgres
     env_file:
@@ -43,15 +41,16 @@ services:
     container_name: auth-db
     volumes:
       - "./data/postgres:/var/lib/postgresql"
+    expose:
+      - "5440"
     ports:
       - "5440:5440"
-    networks:
-      - default
   gateway:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: cloud-conversion-tool-api
+    restart: always
     volumes:
       - ".:/app"
     env_file:

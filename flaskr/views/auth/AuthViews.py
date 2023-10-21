@@ -5,8 +5,8 @@ from http import HTTPStatus
 from sqlalchemy.exc import IntegrityError
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
 from datetime import datetime
-from ..dataContext import db
-from ..models.user import User, UserSchema
+from ...dataContext import db
+from ...models.user import User, UserSchema
 from config import Config
 
 config = Config()
