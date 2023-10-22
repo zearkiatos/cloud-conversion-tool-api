@@ -16,7 +16,7 @@ class LogInView(Resource):
         try:
             username = request.json['username']
             password = request.json['password']
-            user = User.query.filter_by(username=username, password=password).all()
+            user = User.query.filter_by(username=username, password1=password).all()
             if user:
                 args = (username, datetime.utcnow())
                 access_token = create_access_token(identity=user[0].id)
@@ -33,10 +33,10 @@ class LogInView(Resource):
 class SignUpView(Resource):
     def post(self):
         try:
-            user = User.query.filter_by(username=request.json["username"]).all()
+            user = User.query.filter((User.username == request.json["username"]) | (User.email == request.json["email"])).first()
             if not user:
                 new_user = User(
-                    username=request.json["username"], password=request.json["password"])
+                    username=request.json["username"], password1=request.json["password1"], password2=request.json["password2"], email=request.json["email"])
                 access_token = create_access_token(identity=request.json['username'])
                 db.session.add(new_user)
                 db.session.commit()
@@ -48,8 +48,13 @@ class SignUpView(Resource):
                 return {
                     "message": "The user exist"
                 }, HTTPStatus.CONFLICT
+        except ValueError as ex:
+            return {
+                "message": str(ex),
+            }, HTTPStatus.BAD_REQUEST
         except Exception as ex:
             print(f"Error: {str(ex)}")
+
             return {
                 "message": "Something was wrong 🤯",
                 "error": str(ex)
