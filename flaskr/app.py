@@ -29,8 +29,8 @@ api = Api(app)
 
 #resources
 api.add_resource(HealthCheckView, '/health')
-api.add_resource(LogInView, '/auth/login')
-api.add_resource(SignUpView, '/auth/signup')
-api.add_resource(TokenVerifyView, '/token/verify')
+api.add_resource(LogInView, '/api/auth/login')
+api.add_resource(SignUpView, '/api/auth/signup')
+api.add_resource(TokenVerifyView, '/api/token/verify')
 
 jwt = JWTManager(app)
