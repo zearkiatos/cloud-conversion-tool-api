@@ -13,6 +13,9 @@ class VideoFormats(PythonEnum):
     MPEG = 'MPEG'
     WMV = 'WMV'
 
+    def serialize(self):
+        return self.value
+
 class EnumVideoFormats(Enum):
     def __init__(self, enum_type):
         super(EnumVideoFormats, self).__init__(enum_type)
@@ -36,3 +39,4 @@ class ConversionSchema(SQLAlchemyAutoSchema):
         model = Conversion
         include_relationships = True
         load_instance = True
+        
