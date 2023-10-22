@@ -14,8 +14,10 @@ services:
       context: ../cloud-conversion-tool-formatter-api/.
       dockerfile: ../cloud-conversion-tool-formatter-api/dev.Dockerfile
     container_name: cloud-conversion-tool-formatter-api
+    restart: always
     volumes:
       - "../cloud-conversion-tool-formatter-api/.:/app"
+      - file_storage:/app/videos
     ports:
       - "8001:8000"
     env_file:
@@ -24,9 +26,11 @@ services:
     depends_on:
       - broker
       - db
+      - auth-db
     links:
       - broker
       - db
+      - auth-db
   db:
     image: postgres
     env_file:
@@ -52,13 +56,15 @@ services:
       context: .
       dockerfile: dev.Dockerfile
     container_name: cloud-conversion-tool-api
+    restart: always
     volumes:
       - ".:/app"
+      - "./videos:/app/videos"
+      - file_storage:/app/videos
     ports:
       - "5001:5000"
     env_file:
       - .env.dev
-    restart: always
     tty: true
     depends_on:
       - broker
@@ -81,3 +87,5 @@ services:
       - db
     links:
       - db
+volumes:
+  file_storage:

@@ -60,7 +60,7 @@ class ConversionView(Resource):
             "newFormat":str(newFormat)
         },)
         task_posted.apply_async(args)
-        return {"message": "Conversion task in progress, please check in some minutes"}, HTTPStatus.OK
+        return {"id":str(conversion.id), "message": "Conversion task in progress, please check in some minutes"}, HTTPStatus.OK
     
 
 

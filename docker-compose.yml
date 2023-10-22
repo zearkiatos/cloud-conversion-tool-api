@@ -16,15 +16,18 @@ services:
     container_name: cloud-conversion-tool-formatter-api
     volumes:
       - "../cloud-conversion-tool-formatter-api/.:/app"
+      - file_storage:/app/videos
     env_file:
       - ../cloud-conversion-tool-formatter-api/.env.dev
     tty: true
     depends_on:
       - broker
       - db
+      - auth-db
     links:
       - broker
       - db
+      - auth-db
   db:
     image: postgres
     env_file:
@@ -53,6 +56,8 @@ services:
     restart: always
     volumes:
       - ".:/app"
+      - "./videos:/app/videos"
+      - file_storage:/app/videos
     env_file:
       - .env
     tty: true
@@ -76,3 +81,5 @@ services:
     links:
       - gateway
       - formatter-api
+volumes:
+  file_storage:
