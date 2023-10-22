@@ -16,3 +16,7 @@ class Config:
     SECRET_KEY=os.getenv('SECRET_KEY')
     JWT_SECRET_KEY=os.getenv('JWT_SECRET_KEY')
     APP_NAME=os.getenv('APP_NAME')
+    PATH_STORAGE=os.getenv('PATH_STORAGE')
+    TOPICS = {
+        'TASK_POSTED': os.getenv('TOPIC_TASK_POSTED')
+    }
