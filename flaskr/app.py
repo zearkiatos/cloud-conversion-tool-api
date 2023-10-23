@@ -9,7 +9,7 @@ from .dataContext.sqlAlchemyContext import db
 import requests
 from flaskr import create_app
 from config import Config
-from .views import HealthCheckView, LogInView, SignUpView, TokenVerifyView,ConversionView,RecoveryTaskView,DownloadOriginalFile,DownloadConvertedFile
+from .views import HealthCheckView, LogInView, SignUpView, TokenVerifyView,ConversionView,RecoveryTaskView,DownloadOriginalFile,DownloadConvertedFile,ConversionsView, RemoveTaskView
 
 config = Config()
 
@@ -36,6 +36,7 @@ api.add_resource(ConversionView, '/api/tasks')
 api.add_resource(RecoveryTaskView, '/api/tasks/<int:id_task>')
 api.add_resource(DownloadOriginalFile, '/api/downloadoriginalfile/<int:id_task>')
 api.add_resource(DownloadConvertedFile, '/api/downloadconvertedfile/<int:id_task>')
-
+api.add_resource(ConversionsView, '/api/tasks')
+api.add_resource(RemoveTaskView, '/api/tasks/<init:id_task>')
 
 jwt = JWTManager(app)
