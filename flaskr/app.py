@@ -37,6 +37,6 @@ api.add_resource(RecoveryTaskView, '/api/tasks/<int:id_task>')
 api.add_resource(DownloadOriginalFile, '/api/downloadoriginalfile/<int:id_task>')
 api.add_resource(DownloadConvertedFile, '/api/downloadconvertedfile/<int:id_task>')
 api.add_resource(ConversionsView, '/api/tasks')
-api.add_resource(RemoveTaskView, '/api/tasks/<init:id_task>')
+api.add_resource(RemoveTaskView, '/api/tasks/<int:id_task>')
 
 jwt = JWTManager(app)

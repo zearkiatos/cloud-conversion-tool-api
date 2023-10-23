@@ -8,3 +8,4 @@ data
 .avi
 .mpeg
 *.mp4
+.DS_Store
