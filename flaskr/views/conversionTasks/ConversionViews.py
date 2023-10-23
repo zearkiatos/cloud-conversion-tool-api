@@ -129,37 +129,29 @@ class ConversionsView(Resource):
 
 class RemoveTaskView(Resource):
     @jwt_required()
-    def delete(self):
-        conversions_task=Conversion.query.filter_by(id=id_task).one_or_one()
+    def delete(self,id_task):
+        conversion_task=Conversion.query.filter_by(id=id_task).one_or_none()
         if conversion_task is not None:
-            if conversions_task.status=='processed':
-                db.session.delete(conversions_task)
+            if conversion_task.status=='processed':
+                db.session.delete(conversion_task)
                 db.session.commit()
-                nombre_archivo = config.PATH_STORAGE+'input/'+str(conversions_task.id)+conversions_task.file_name
+                #deleting files
+                nombre_archivo = config.PATH_STORAGE+'input/'+str(conversion_task.id)+conversion_task.file_name
                 if os.path.exists(nombre_archivo):
                     try:
                         os.remove(nombre_archivo)
-                        
                     except Exception as ex:
                         pass
-                    nombre_archivo =  config.PATH_STORAGE+'input/'+str(conversions_task.id)+conversions_task.file_name+'.'+str(conversions_task.new_format.serialize()).lower()
-                    if  os.path.exists(nombre_archivo):
-                        try:
-                            os.remove(nombre_archivo)
-                        except Exception as ex:
-                            pass
-                    return {
-                        'message':'Conversion task deleted successfully'
+                nombre_archivo = config.PATH_STORAGE+'output/'+str(conversion_task.id)+conversion_task.file_name+'.'+str(conversion_task.new_format.serialize()).lower()
+                if os.path.exists(nombre_archivo):
+                    try:
+                        os.remove(nombre_archivo)
+                    except Exception as ex:
+                        pass
+                return {
+                        'message': 'Conversion task deleted successfully'
                     }, HTTPStatus.NO_CONTENT
-                else:
-                    return  {
-                        'message':'The id provided doesnt available in this moment'
-                    }, HTTPStatus.NOT_FOUND
             else:
-                return  {
-                    'message':'The id provided doesnt exist in the system'
-                }, HTTPStatus.NOT_FOUND
-
-
-
-
+                return {"message": "The id provided doesn't available in this moment"}, HTTPStatus.NOT_FOUND
+        else:
+            return {"message": "The id provided doesn't exist in the system "}, HTTPStatus.NOT_FOUND
