@@ -63,6 +63,11 @@ class ConversionView(Resource):
         return {"id":str(conversion.id), "message": "Conversion task in progress, please check in some minutes"}, HTTPStatus.OK
     
 
+    
+
+       
+
+
 
 
 class RecoveryTaskView(Resource):
@@ -111,3 +116,52 @@ class DownloadConvertedFile(Resource):
 
 
 
+class ConversionsView(Resource):
+    @jwt_required()
+    def get(self):
+        conversions_task=Conversion.query.all()
+        list_conversions=[]
+        for conversion_task in conversions_task:
+            conversion={
+                'id':conversion_task.id,
+                'file_name':conversion_task.file_name,
+                'new_format':conversion_task.new_format.serialize(),
+                'time_stamp':conversion_task.time_stamp.strftime('%Y-%m-%d %H:%M:%S'),
+                'status':conversion_task.status,
+                'link_original_file': config.APP_URL+ 'api/downloadoriginalfile/'+str(conversion_task.id),
+                'link_converted_file':config.APP_URL+'api/downloadconvertedfile/'+str(conversion_task.id)
+            }
+            list_conversions.append(conversion)
+        return jsonify(list_conversions)
+        
+       
+class RemoveTaskView(Resource):
+    @jwt_required()
+    def delete(self,id_task):
+        conversion_task=Conversion.query.filter_by(id=id_task).one_or_none()
+        if conversion_task is not None:
+            if conversion_task.status=='processed':
+                db.session.delete(conversion_task)
+                db.session.commit()
+                #deleting files
+                nombre_archivo = config.PATH_STORAGE+'input/'+str(conversion_task.id)+conversion_task.file_name
+                if os.path.exists(nombre_archivo):
+                    try:
+                        os.remove(nombre_archivo)
+                    except Exception as ex:
+                        pass
+
+                nombre_archivo = config.PATH_STORAGE+'output/'+str(conversion_task.id)+conversion_task.file_name+'.'+str(conversion_task.new_format.serialize()).lower()
+                if os.path.exists(nombre_archivo):
+                    try:
+                        os.remove(nombre_archivo)
+                    except Exception as ex:
+                        pass
+
+                return {
+                        'message': 'Conversion task deleted successfully'
+                    }, HTTPStatus.NO_CONTENT
+            else:
+                return {"message": "The id provided doesn't available in this moment"}, HTTPStatus.NOT_FOUND
+        else:
+            return {"message": "The id provided doesn't exist in the system "}, HTTPStatus.NOT_FOUND
