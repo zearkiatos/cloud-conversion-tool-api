@@ -32,6 +32,7 @@ class Conversion(db.Model):
     new_format = db.Column(EnumVideoFormats(VideoFormats))
     time_stamp = db.Column(DateTime, default=func.now())
     status = db.Column(db.String(100), default='uploaded')
+    user = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class ConversionSchema(SQLAlchemyAutoSchema):
 

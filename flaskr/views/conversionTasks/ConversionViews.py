@@ -38,6 +38,8 @@ class ConversionView(Resource):
             destination=VideoFormats.MPEG
         else:
             return {"message": "The format is not supported"}, HTTPStatus.BAD_REQUEST
+        
+        user_id = get_jwt_identity()
 
 
         if str(newFormat)==extension.upper().replace('.',''):
@@ -45,7 +47,8 @@ class ConversionView(Resource):
 
         conversion=Conversion(
             file_name=file.filename,
-            new_format=destination
+            new_format=destination,
+            user = user_id
         )
 
         db.session.add(conversion)
@@ -53,12 +56,17 @@ class ConversionView(Resource):
 
         #storing file
         file.save(config.PATH_STORAGE+'input/'+str(conversion.id)+file.filename)
-
-        args = ({
-            "id":str(conversion.id),
-            "fileName":file.filename,
-            "newFormat":str(newFormat)
-        },)
+        try:
+            args = ({
+                "id":str(conversion.id),
+                "fileName":file.filename,
+                "newFormat":str(newFormat),
+                "userId":conversion.user
+            },)
+        except Exception as ex:
+            return {
+                "message": f'error: {str(ex)}' 
+            }, HTTPStatus.INTERNAL_SERVER_ERROR
         task_posted.apply_async(args)
         return {"id":str(conversion.id), "message": "Conversion task in progress, please check in some minutes"}, HTTPStatus.OK
     
@@ -68,7 +76,8 @@ class ConversionView(Resource):
 class RecoveryTaskView(Resource):
     @jwt_required()
     def get(self,id_task):
-        conversion_task=Conversion.query.filter_by(id=id_task).one_or_none()
+        user_id = get_jwt_identity()
+        conversion_task=Conversion.query.filter_by(id=id_task, user=user_id).one_or_none()
         if conversion_task is not None:
             object_to_return={
                 'id':conversion_task.id,
@@ -86,7 +95,8 @@ class RecoveryTaskView(Resource):
 
 class DownloadOriginalFile(Resource):
     def get(self,id_task):
-        conversion_task=Conversion.query.filter_by(id=id_task).one_or_none()
+        user_id = get_jwt_identity()
+        conversion_task=Conversion.query.filter_by(id=id_task, user=user_id).one_or_none()
         if conversion_task is not None:
             nombre_archivo = config.PATH_STORAGE+'input/'+str(conversion_task.id)+conversion_task.file_name
             if os.path.exists(nombre_archivo):
@@ -99,7 +109,8 @@ class DownloadOriginalFile(Resource):
 
 class DownloadConvertedFile(Resource):
     def get(self,id_task):
-        conversion_task=Conversion.query.filter_by(id=id_task).one_or_none()
+        user_id = get_jwt_identity()
+        conversion_task=Conversion.query.filter_by(id=id_task, user=user_id).one_or_none()
         if conversion_task is not None:
             nombre_archivo = config.PATH_STORAGE+'output/'+str(conversion_task.id)+conversion_task.file_name+'.'+str(conversion_task.new_format.serialize()).lower()
             if os.path.exists(nombre_archivo):
@@ -112,7 +123,8 @@ class DownloadConvertedFile(Resource):
 class ConversionsView(Resource):
     @jwt_required()
     def get(self):
-        conversions_task=Conversion.query.all()
+        user_id = get_jwt_identity()
+        conversions_task=Conversion.query.filter_by(user=user_id).all()
         list_conversions=[]
         for conversion_task in conversions_task:
             conversion={
@@ -130,7 +142,8 @@ class ConversionsView(Resource):
 class RemoveTaskView(Resource):
     @jwt_required()
     def delete(self,id_task):
-        conversion_task=Conversion.query.filter_by(id=id_task).one_or_none()
+        user_id = get_jwt_identity()
+        conversion_task=Conversion.query.filter_by(id=id_task, user=user_id).one_or_none()
         if conversion_task is not None:
             if conversion_task.status=='processed':
                 db.session.delete(conversion_task)
