@@ -95,8 +95,7 @@ class RecoveryTaskView(Resource):
 
 class DownloadOriginalFile(Resource):
     def get(self,id_task):
-        user_id = get_jwt_identity()
-        conversion_task=Conversion.query.filter_by(id=id_task, user=user_id).one_or_none()
+        conversion_task=Conversion.query.filter_by(id=id_task).one_or_none()
         if conversion_task is not None:
             nombre_archivo = config.PATH_STORAGE+'input/'+str(conversion_task.id)+conversion_task.file_name
             if os.path.exists(nombre_archivo):
@@ -109,8 +108,7 @@ class DownloadOriginalFile(Resource):
 
 class DownloadConvertedFile(Resource):
     def get(self,id_task):
-        user_id = get_jwt_identity()
-        conversion_task=Conversion.query.filter_by(id=id_task, user=user_id).one_or_none()
+        conversion_task=Conversion.query.filter_by(id=id_task).one_or_none()
         if conversion_task is not None:
             nombre_archivo = config.PATH_STORAGE+'output/'+str(conversion_task.id)+conversion_task.file_name+'.'+str(conversion_task.new_format.serialize()).lower()
             if os.path.exists(nombre_archivo):
