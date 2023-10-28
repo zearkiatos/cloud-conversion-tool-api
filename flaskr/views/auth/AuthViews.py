@@ -37,9 +37,10 @@ class SignUpView(Resource):
             if not user:
                 new_user = User(
                     username=request.json["username"], password1=request.json["password1"], password2=request.json["password2"], email=request.json["email"])
-                access_token = create_access_token(identity=request.json['username'])
                 db.session.add(new_user)
                 db.session.commit()
+                user = User.query.filter_by(username=new_user.username).all()
+                access_token = create_access_token(identity=user[0].id)
                 return {
                     "message": "Created user successful",
                     "accessToken": access_token

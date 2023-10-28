@@ -2,6 +2,7 @@ from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from sqlalchemy.orm import validates
 import re
 from ..dataContext.sqlAlchemyContext import db
+from .conversion import Conversion
 
 
 class User(db.Model):
