@@ -1,0 +1,44 @@
+version: "3.9"
+services:
+  formatter-api:
+    build:
+      context: ../cloud-conversion-tool-formatter-api/.
+      dockerfile: ../cloud-conversion-tool-formatter-api/dev.Dockerfile
+    container_name: cloud-conversion-tool-formatter-api
+    volumes:
+      - "../cloud-conversion-tool-formatter-api/.:/app"
+      - file_storage:/app/videos
+    env_file:
+      - ../cloud-conversion-tool-formatter-api/.env.dev
+    tty: true
+  gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cloud-conversion-tool-api
+    restart: always
+    volumes:
+      - ".:/app"
+      - "./videos:/app/videos"
+      - file_storage:/app/videos
+    env_file:
+      - .env
+    tty: true
+    depends_on:
+      - formatter-api
+    links:
+      - formatter-api
+  server:
+    build:
+      context: .
+      dockerfile: nginx.Dockerfile
+    ports:
+      - 80:80
+    depends_on:
+      - gateway
+      - formatter-api
+    links:
+      - gateway
+      - formatter-api
+volumes:
+  file_storage:
