@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "vinilos-404600",
+  "private_key_id": "2d865a059b42ada10983a98c33612c89134e802f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCyhjsjBvl0c6kg\nKdhuOSykeZsGp5xtIcUIH2mVM29AamDTHreoq85B03b+NA6HYrXXvcPJNtfq/G5M\nCR9papvJ3rMbRwfmPX7uG1Rm02XnNb9k0paLY9KuyDhnn3gsfPgB2UiXFAyicD6S\nWZvZbe+DHEQq++8yMQV3AYJfbDCJjMJ4lJRNXQWB1MulYS2h5Rqlny5LN6h0K78u\nr+o84GeFspEnUsfgF8h8eGRsizlxzYVhZRRdP0JrCLLlCx/Lg2kMx8y428ohJ+q5\nmEEp9tpiyW4CpUXGw4mhwnBDQLS1XCUohONWMkMTmDO2McTQQij+lZwKZx8aWxEZ\nT8mpqSz5AgMBAAECggEAAuqDY8aU44ySGibk1KQVcRhVam3pdbTkAYZ11IyTCCPU\nsg4h5NztkRCxtGRISnjXzI7aeFpve3SlHpPVkgS+R7VeCpeF7wJZJO2IWuegFf9A\nQZbZA6zdP6KgnTyzG1LtQCZ685DNxgd8Viqli48qpuMaz/LujMzVMITzSri7MDv3\n1sGTaI6HG8qrAu3uFIe2+9CJ0wH1tlkA7sHLjXUqTryb71mBhwlPBGn7549MhgV5\nB8mlvkIR9tS/+kSTVmzRsEEBpN5u5mKQH+lRB37dTSSaGyZwMIEKSsUMHKZUfWzP\nKfIXrMupn71H4Dm0zHa9Fi54kMm+M3kL0k2DOHo6QQKBgQDwrwL+DX/OFVr9WTH3\nlpz8DSV+Nngr/um52cA5cGIFqHNMyWu/2JtLqyMqojmeydMp4ApUP3Q1jU1yRFCa\nrxqjQhNKKFYH6sPqOIazFIoCfcsM9I/DOm+XFaS2y66IgHWtkBKdYLBYvInHbMnX\n/a5sq0EHNCaTvxs2YSBKF9GlaQKBgQC94pRMNClX3tajtQ/DBugZ7OL+/Ibgdv/z\ndBb0iOJmMTSVkJ1JL1elqFHr0ewwSBVeMXBioo+SF1ApySFx3CmcwwGJpiVwtYCy\nT7M6be6+yHCCWtZqSgfzEjFcwMMLJO0FtCAZgXGNsk+uSb66NCM1Ouydn4jjEcYu\nVdGhSniJEQKBgQDLWHHExw71xKEtb1CCCCP15/2HVunM8f/yX4DChqqqcRmJBJwe\naBk8owiBGrJn78iSlpDjgQDjxdBq/EDFj6+Hw2mcu9uDsNt5ZeyYHIBFfpYxCeb0\nYMiq80RIlGmPNkk2LIUtpeUX86LMdKNL8y6M7VtxhKQbK9kH5qNrNhiQEQKBgG3d\njk51E8K6tVftKByAf4SYklJUjDmNwNP8xFdiaBQWvkUXclno4X6A4D1grZbV7j8c\nvdjkE8vEX2Z98DLv3sfL8LTTA/Cto7QH9zyEZNHQKYDSzCKdiPH0AcmX4oItMFLP\ngI8hXTFODVpbYtZb2k8vM76TkuFG5HLkxrDa5NjxAoGAEirkUKOrUQAr28lDRqYC\n/AhWvnBSK9tL3kyEsEL3D8HNvQ66aOWIJmjVLEINnCZ9jxFrgsb2Gs/CTmFKrt2g\nHnARvHnjcBnGxAFRh29a0tJIFk4D6lGE2apwqcR8TDKlvGS5qJsVUAab+Yrr8VIb\n4Fr/QJdydt6XLm4yjC4rOfI=\n-----END PRIVATE KEY-----\n",
+  "client_email": "prueba-conversar@vinilos-404600.iam.gserviceaccount.com",
+  "client_id": "109774153190655702910",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/prueba-conversar%40vinilos-404600.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
