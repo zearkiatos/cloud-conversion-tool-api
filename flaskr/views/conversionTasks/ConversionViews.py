@@ -105,15 +105,17 @@ class ConversionsView(Resource):
         conversions_task=Conversion.query.filter_by(user=user_id).all()
         list_conversions=[]
         for conversion_task in conversions_task:
+            converted_file_url = config.BUCKET_URL+'output/'+str(conversion_task.id)+conversion_task.file_name+'.'+str(conversion_task.new_format.serialize()).lower() if conversion_task.status=='processed' else ''
             conversion={
-                'id':conversion_task.id,
-                'file_name':conversion_task.file_name,
-                'new_format':conversion_task.new_format.serialize(),
-                'time_stamp':conversion_task.time_stamp.strftime('%Y-%m-%d %H:%M:%S'),
-                'status':conversion_task.status,
-                'link_original_file': config.BUCKET_URL+ 'input/'+str(conversion_task.id)+conversion_task.file_name,
-                'link_converted_file':config.BUCKET_URL+'output/'+str(conversion_task.id)+conversion_task.file_name+'.'+str(conversion_task.new_format.serialize()).lower()
+                    'id':conversion_task.id,
+                    'file_name':conversion_task.file_name,
+                    'new_format':conversion_task.new_format.serialize(),
+                    'time_stamp':conversion_task.time_stamp.strftime('%Y-%m-%d %H:%M:%S'),
+                    'status':conversion_task.status,
+                    'link_original_file': config.BUCKET_URL+ 'input/'+str(conversion_task.id)+conversion_task.file_name,
+                    'link_converted_file':converted_file_url
             }
+           
             list_conversions.append(conversion)
         return jsonify(list_conversions)
 
