@@ -18,6 +18,8 @@ class Config:
     APP_NAME=os.getenv('APP_NAME')
     PATH_STORAGE=os.getenv('PATH_STORAGE')
     APP_URL=os.getenv('APP_URL')
+    CONVERSION_BUCKET=os.getenv('CONVERSION_BUCKET')
+    BUCKET_URL=os.getenv('BUCKET_URL')
     TOPICS = {
         'TASK_POSTED': os.getenv('TOPIC_TASK_POSTED')
     }
