@@ -10,6 +10,7 @@ from ...producer.queueProducer import task_posted
 from ...models.conversion import Conversion,VideoFormats,ConversionSchema
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
 from enum import Enum
+from google.cloud import storage
 
 
 config = Config()
@@ -55,7 +56,12 @@ class ConversionView(Resource):
         db.session.commit()
 
         #storing file
-        file.save(config.PATH_STORAGE+'input/'+str(conversion.id)+file.filename)
+        storage_client = storage.Client()
+        bucket = storage_client.get_bucket(config.CONVERSION_BUCKET)
+        blob = bucket.blob('input/'+str(conversion.id)+file.filename)
+        blob.upload_from_file(file)
+
+        
         try:
             args = ({
                 "id":str(conversion.id),
@@ -85,39 +91,13 @@ class RecoveryTaskView(Resource):
                 'new_format':conversion_task.new_format.serialize(),
                 'time_stamp':conversion_task.time_stamp.strftime('%Y-%m-%d %H:%M:%S'),
                 'status':conversion_task.status,
-                'link_original_file': config.APP_URL+ 'api/downloadoriginalfile/'+str(conversion_task.id),
-                'link_converted_file':config.APP_URL+'api/downloadconvertedfile/'+str(conversion_task.id)
+                'link_original_file': config.BUCKET_URL+ 'input/'+str(conversion_task.id)+conversion_task.file_name,
+                'link_converted_file':config.BUCKET_URL+'output/'+str(conversion_task.id)+conversion_task.file_name+'.'+str(conversion_task.new_format.serialize()).lower()
             }
             return object_to_return, HTTPStatus.OK
         else:
             return {"message": "The id provided doesn't exist in the system "}, HTTPStatus.NOT_FOUND
        
-
-class DownloadOriginalFile(Resource):
-    def get(self,id_task):
-        conversion_task=Conversion.query.filter_by(id=id_task).one_or_none()
-        if conversion_task is not None:
-            nombre_archivo = config.PATH_STORAGE+'input/'+str(conversion_task.id)+conversion_task.file_name
-            if os.path.exists(nombre_archivo):
-                return send_file(nombre_archivo, as_attachment=True)
-            else:
-                return 'File not found', 404
-        else:
-            return 'File not found', 404
-        
-
-class DownloadConvertedFile(Resource):
-    def get(self,id_task):
-        conversion_task=Conversion.query.filter_by(id=id_task).one_or_none()
-        if conversion_task is not None:
-            nombre_archivo = config.PATH_STORAGE+'output/'+str(conversion_task.id)+conversion_task.file_name+'.'+str(conversion_task.new_format.serialize()).lower()
-            if os.path.exists(nombre_archivo):
-                return send_file(nombre_archivo, as_attachment=True)
-            else:
-                return 'File not found', 404
-        else:
-            return 'File not found', 404
-        
 class ConversionsView(Resource):
     @jwt_required()
     def get(self):
@@ -125,15 +105,17 @@ class ConversionsView(Resource):
         conversions_task=Conversion.query.filter_by(user=user_id).all()
         list_conversions=[]
         for conversion_task in conversions_task:
+            converted_file_url = config.BUCKET_URL+'output/'+str(conversion_task.id)+conversion_task.file_name+'.'+str(conversion_task.new_format.serialize()).lower() if conversion_task.status=='processed' else ''
             conversion={
-                'id':conversion_task.id,
-                'file_name':conversion_task.file_name,
-                'new_format':conversion_task.new_format.serialize(),
-                'time_stamp':conversion_task.time_stamp.strftime('%Y-%m-%d %H:%M:%S'),
-                'status':conversion_task.status,
-                'link_original_file': config.APP_URL+ 'api/downloadoriginalfile/'+str(conversion_task.id),
-                'link_converted_file':config.APP_URL+'api/downloadconvertedfile/'+str(conversion_task.id)
+                    'id':conversion_task.id,
+                    'file_name':conversion_task.file_name,
+                    'new_format':conversion_task.new_format.serialize(),
+                    'time_stamp':conversion_task.time_stamp.strftime('%Y-%m-%d %H:%M:%S'),
+                    'status':conversion_task.status,
+                    'link_original_file': config.BUCKET_URL+ 'input/'+str(conversion_task.id)+conversion_task.file_name,
+                    'link_converted_file':converted_file_url
             }
+           
             list_conversions.append(conversion)
         return jsonify(list_conversions)
 
@@ -143,22 +125,23 @@ class RemoveTaskView(Resource):
         user_id = get_jwt_identity()
         conversion_task=Conversion.query.filter_by(id=id_task, user=user_id).one_or_none()
         if conversion_task is not None:
-            if conversion_task.status=='processed':
+            #processed
+            if conversion_task.status=='uploaded':
                 db.session.delete(conversion_task)
                 db.session.commit()
                 #deleting files
-                nombre_archivo = config.PATH_STORAGE+'input/'+str(conversion_task.id)+conversion_task.file_name
-                if os.path.exists(nombre_archivo):
-                    try:
-                        os.remove(nombre_archivo)
-                    except Exception as ex:
-                        pass
-                nombre_archivo = config.PATH_STORAGE+'output/'+str(conversion_task.id)+conversion_task.file_name+'.'+str(conversion_task.new_format.serialize()).lower()
-                if os.path.exists(nombre_archivo):
-                    try:
-                        os.remove(nombre_archivo)
-                    except Exception as ex:
-                        pass
+                try:
+                    storage_client = storage.Client()
+                    bucket = storage_client.get_bucket(config.CONVERSION_BUCKET)
+                    #borrando archivo origen
+                    blob = bucket.blob('input/'+str(conversion_task.id)+conversion_task.file_name)
+                    blob.delete()
+                    #borrando archivo destino
+                    blob = bucket.blob('output/'+str(conversion_task.id)+conversion_task.file_name+'.'+str(conversion_task.new_format.serialize()).lower())
+                    blob.delete()
+                except Exception as ex:
+                    pass
+                
                 return {
                         'message': 'Conversion task deleted successfully'
                     }, HTTPStatus.NO_CONTENT
