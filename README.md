@@ -147,18 +147,19 @@ docker compose -f=docker-compose.develop.yml down
 
 1. Firstly, you need to check de folder **postman** inside the root of the project
 
-**ADD A IMAGE**
+![Screenshot 2023-11-11 at 22 21 05](https://github.com/zearkiatos/cloud-conversion-tool-api/assets/10298615/be615b20-a6cc-4c13-b4ad-4a1ab9b2d1ec)
+
 
 2. You need to open your postman and import all of them, the collection and the three environment you have the next environment
 * **CLOUD_CONVERSION_DOCKER_DEVELOP**: this is to run the project without any intermediate layer you can use this environment with **docker-compose.develop.yml** and the base api is on **http://localhost:5001**
 
-* CLOUD_CONVERSION_DOCKER_PROXY_DEVELOP: This is to run the project with a proxy reverse with **nginx** simulating the cloud environment this base api run on **http://localhost/** on default http port 80
+* **CLOUD_CONVERSION_DOCKER_PROXY_DEVELOP**: This is to run the project with a proxy reverse with **nginx** simulating the cloud environment this base api run on **http://localhost/** on default http port 80
 
-* CLOUD_CONVERSION_CLOUD_LOAD_BALANCE: This is the base url for test environment that run on public DNS the load balance the url is **http://cloud-conversion-tool.lb.lab-cloud-development.xyz/**
+* **CLOUD_CONVERSION_CLOUD_LOAD_BALANCE**: This is the base url for test environment that run on public DNS the load balance the url is **http://cloud-conversion-tool.lb.lab-cloud-development.xyz/**
 
 3. When you will have all environments and the collection on your postman you most add the prescript **postmanPrescript.js** on the folder **postman**
 
-**ADD IMAGE**
+![Screenshot 2023-11-11 at 22 22 22](https://github.com/zearkiatos/cloud-conversion-tool-api/assets/10298615/e4e32a24-7511-4a58-b7ae-b856961d93a1)
 
 * You should add this prescript on all http request that need a token,
 
@@ -196,4 +197,9 @@ pm.sendRequest(options, function (error, response) {
     }
 })
 ```
+4. If you want to use your own user you must change the variables **DEFAULT_USERNAME** and **DEFAULT_PASSWORD** in the **postman** environment
+
+![Screenshot 2023-11-11 at 22 25 05](https://github.com/zearkiatos/cloud-conversion-tool-api/assets/10298615/a73d4a2b-499a-4e8d-8252-074067fd6045)
+
+
 
