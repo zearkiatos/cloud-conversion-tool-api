@@ -1,0 +1,540 @@
+{
+	"info": {
+		"_postman_id": "5033c085-c9b8-42ca-bc83-e7872324e23b",
+		"name": "Cloud conversion tool project",
+		"description": "Cloud conversion tool Documentacion and postman collection.\n\nIf you need to access a Backend you can see the respective Hosts on the next table.\n\n| **APP** | **ENV** | **HOST** | **Descripton** |\n| --- | --- | --- | --- |\n| web-app | local | localhost:8000 | Developer env to test |\n| web-app | Dev |  |  |\n|  |  |  |  |",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1347256"
+	},
+	"item": [
+		{
+			"name": "healtCheck",
+			"item": [
+				{
+					"name": "healthCheck",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{CLOUD_CONVERSION_TOOL_API_BASE_URL}}/health",
+							"host": [
+								"{{CLOUD_CONVERSION_TOOL_API_BASE_URL}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "healthCheck-formatter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{CLOUD_CONVERSION_TOOL_FORMATTER_API_BASE_URL}}/health",
+							"host": [
+								"{{CLOUD_CONVERSION_TOOL_FORMATTER_API_BASE_URL}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "task",
+			"item": [
+				{
+					"name": "tasks",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const CLOUD_CONVERSION_TOOL_BASE_API_URL = pm.environment.get('CLOUD_CONVERSION_TOOL_API_BASE_URL');",
+									"const username = pm.environment.get('DEFAULT_USERNAME');",
+									"const password = pm.environment.get('DEFAULT_PASSWORD');",
+									"",
+									"const options = {",
+									"    url: `${CLOUD_CONVERSION_TOOL_BASE_API_URL}/api/auth/login`,",
+									"    method: 'POST',",
+									"    header: {",
+									"        'Content-Type': 'application/json'",
+									"    },",
+									"    body: {",
+									"        mode: 'raw',",
+									"        raw: JSON.stringify({",
+									"            \"username\": username,",
+									"            \"password\": password",
+									"        })",
+									"    }",
+									"}",
+									"",
+									"pm.sendRequest(options, function (error, response) {",
+									"    var jsonData = response.json();",
+									"    if (error) {",
+									"        console.log(error);",
+									"    }",
+									"    else {",
+									"        pm.environment.set('CLOUD_CONVERSION_TOOL_API_TOKEN', jsonData.accessToken)",
+									"    }",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{CLOUD_CONVERSION_TOOL_API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "fileName",
+									"type": "file",
+									"src": "/Users/pedrocapriles/Downloads/9video.mp4"
+								},
+								{
+									"key": "data",
+									"value": "{\"newFormat\":\"MPEG\"}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{CLOUD_CONVERSION_TOOL_API_BASE_URL}}/api/tasks",
+							"host": [
+								"{{CLOUD_CONVERSION_TOOL_API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "tasks",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const CLOUD_CONVERSION_TOOL_BASE_API_URL = pm.environment.get('CLOUD_CONVERSION_TOOL_API_BASE_URL');",
+									"const username = pm.environment.get('DEFAULT_USERNAME');",
+									"const password = pm.environment.get('DEFAULT_PASSWORD');",
+									"",
+									"const options = {",
+									"    url: `${CLOUD_CONVERSION_TOOL_BASE_API_URL}/api/auth/login`,",
+									"    method: 'POST',",
+									"    header: {",
+									"        'Content-Type': 'application/json'",
+									"    },",
+									"    body: {",
+									"        mode: 'raw',",
+									"        raw: JSON.stringify({",
+									"            \"username\": username,",
+									"            \"password\": password",
+									"        })",
+									"    }",
+									"}",
+									"",
+									"pm.sendRequest(options, function (error, response) {",
+									"    var jsonData = response.json();",
+									"    if (error) {",
+									"        console.log(error);",
+									"    }",
+									"    else {",
+									"        pm.environment.set('CLOUD_CONVERSION_TOOL_API_TOKEN', jsonData.accessToken)",
+									"    }",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{CLOUD_CONVERSION_TOOL_API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "fileName",
+									"type": "file",
+									"src": "/Users/pedrocapriles/Downloads/video.mp4"
+								},
+								{
+									"key": "data",
+									"value": "{\"newFormat\":\"MPEG\"}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{CLOUD_CONVERSION_TOOL_API_BASE_URL}}/api/tasks/15006",
+							"host": [
+								"{{CLOUD_CONVERSION_TOOL_API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"15006"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "alltasks",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const CLOUD_CONVERSION_TOOL_BASE_API_URL = pm.environment.get('CLOUD_CONVERSION_TOOL_API_BASE_URL');",
+									"const username = pm.environment.get('DEFAULT_USERNAME');",
+									"const password = pm.environment.get('DEFAULT_PASSWORD');",
+									"",
+									"const options = {",
+									"    url: `${CLOUD_CONVERSION_TOOL_BASE_API_URL}/api/auth/login`,",
+									"    method: 'POST',",
+									"    header: {",
+									"        'Content-Type': 'application/json'",
+									"    },",
+									"    body: {",
+									"        mode: 'raw',",
+									"        raw: JSON.stringify({",
+									"            \"username\": username,",
+									"            \"password\": password",
+									"        })",
+									"    }",
+									"}",
+									"",
+									"pm.sendRequest(options, function (error, response) {",
+									"    var jsonData = response.json();",
+									"    if (error) {",
+									"        console.log(error);",
+									"    }",
+									"    else {",
+									"        pm.environment.set('CLOUD_CONVERSION_TOOL_API_TOKEN', jsonData.accessToken)",
+									"    }",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{CLOUD_CONVERSION_TOOL_API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{CLOUD_CONVERSION_TOOL_API_BASE_URL}}/api/tasks",
+							"host": [
+								"{{CLOUD_CONVERSION_TOOL_API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "task",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const CLOUD_CONVERSION_TOOL_BASE_API_URL = pm.environment.get('CLOUD_CONVERSION_TOOL_API_BASE_URL');",
+									"const username = pm.environment.get('DEFAULT_USERNAME');",
+									"const password = pm.environment.get('DEFAULT_PASSWORD');",
+									"",
+									"const options = {",
+									"    url: `${CLOUD_CONVERSION_TOOL_BASE_API_URL}/api/auth/login`,",
+									"    method: 'POST',",
+									"    header: {",
+									"        'Content-Type': 'application/json'",
+									"    },",
+									"    body: {",
+									"        mode: 'raw',",
+									"        raw: JSON.stringify({",
+									"            \"username\": username,",
+									"            \"password\": password",
+									"        })",
+									"    }",
+									"}",
+									"",
+									"pm.sendRequest(options, function (error, response) {",
+									"    var jsonData = response.json();",
+									"    if (error) {",
+									"        console.log(error);",
+									"    }",
+									"    else {",
+									"        pm.environment.set('CLOUD_CONVERSION_TOOL_API_TOKEN', jsonData.accessToken)",
+									"    }",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{CLOUD_CONVERSION_TOOL_API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{CLOUD_CONVERSION_TOOL_API_BASE_URL}}/api/tasks/1",
+							"host": [
+								"{{CLOUD_CONVERSION_TOOL_API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "signup",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"zearkiatos\",\n    \"password1\": \"P@$$w0rd\",\n    \"password2\": \"P@$$w0rd\",\n    \"email\": \"caprilespe@outlook.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{CLOUD_CONVERSION_TOOL_API_BASE_URL}}/api/auth/signup",
+					"host": [
+						"{{CLOUD_CONVERSION_TOOL_API_BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"zearkiatos\",\n    \"password\": \"P@$$w0rd\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{CLOUD_CONVERSION_TOOL_API_BASE_URL}}/api/auth/login",
+					"host": [
+						"{{CLOUD_CONVERSION_TOOL_API_BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verifyToken",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const CLOUD_CONVERSION_TOOL_BASE_API_URL = pm.environment.get('CLOUD_CONVERSION_TOOL_API_BASE_URL');",
+							"const username = pm.environment.get('DEFAULT_USERNAME');",
+							"const password = pm.environment.get('DEFAULT_PASSWORD');",
+							"",
+							"const options = {",
+							"    url: `${CLOUD_CONVERSION_TOOL_BASE_API_URL}/api/auth/login`,",
+							"    method: 'POST',",
+							"    header: {",
+							"        'Content-Type': 'application/json'",
+							"    },",
+							"    body: {",
+							"        mode: 'raw',",
+							"        raw: JSON.stringify({",
+							"            \"username\": username,",
+							"            \"password\": password",
+							"        })",
+							"    }",
+							"}",
+							"",
+							"pm.sendRequest(options, function (error, response) {",
+							"    var jsonData = response.json();",
+							"    if (error) {",
+							"        console.log(error);",
+							"    }",
+							"    else {",
+							"        pm.environment.set('CLOUD_CONVERSION_TOOL_API_TOKEN', jsonData.accessToken)",
+							"    }",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{CLOUD_CONVERSION_TOOL_API_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{CLOUD_CONVERSION_TOOL_API_BASE_URL}}/api/token/verify",
+					"host": [
+						"{{CLOUD_CONVERSION_TOOL_API_BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"token",
+						"verify"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{TOEKN}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "TOEKN",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY5NzkxNzc4MSwianRpIjoiYzNkZGZiMmMtY2M3Yi00ZGM3LWJjZWQtNmRiMDdjODcxMmQ5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MSwibmJmIjoxNjk3OTE3NzgxLCJleHAiOjE2OTc5MTg2ODF9.arxyB2F4sYpaT6TmdJUwkOKVXmZoYPrO_Un830kmffs"
+		}
+	]
+}

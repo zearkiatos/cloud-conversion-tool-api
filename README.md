@@ -143,3 +143,57 @@ source run.sh; docker_dev_down
 docker compose -f=docker-compose.develop.yml down
 ```
 
+# If you want to try the application with postman 👩🏻‍🚀
+
+1. Firstly, you need to check de folder **postman** inside the root of the project
+
+**ADD A IMAGE**
+
+2. You need to open your postman and import all of them, the collection and the three environment you have the next environment
+* **CLOUD_CONVERSION_DOCKER_DEVELOP**: this is to run the project without any intermediate layer you can use this environment with **docker-compose.develop.yml** and the base api is on **http://localhost:5001**
+
+* CLOUD_CONVERSION_DOCKER_PROXY_DEVELOP: This is to run the project with a proxy reverse with **nginx** simulating the cloud environment this base api run on **http://localhost/** on default http port 80
+
+* CLOUD_CONVERSION_CLOUD_LOAD_BALANCE: This is the base url for test environment that run on public DNS the load balance the url is **http://cloud-conversion-tool.lb.lab-cloud-development.xyz/**
+
+3. When you will have all environments and the collection on your postman you most add the prescript **postmanPrescript.js** on the folder **postman**
+
+**ADD IMAGE**
+
+* You should add this prescript on all http request that need a token,
+
+* This prescript is to authenticate the user and create the token
+
+* This is the prescript
+
+```js
+const CLOUD_CONVERSION_TOOL_BASE_API_URL = pm.environment.get('CLOUD_CONVERSION_TOOL_API_BASE_URL');
+const username = pm.environment.get('DEFAULT_USERNAME');
+const password = pm.environment.get('DEFAULT_PASSWORD');
+
+const options = {
+    url: `${CLOUD_CONVERSION_TOOL_BASE_API_URL}/api/auth/login`,
+    method: 'POST',
+    header: {
+        'Content-Type': 'application/json'
+    },
+    body: {
+        mode: 'raw',
+        raw: JSON.stringify({
+            "username": username,
+            "password": password
+        })
+    }
+}
+
+pm.sendRequest(options, function (error, response) {
+    var jsonData = response.json();
+    if (error) {
+        console.log(error);
+    }
+    else {
+        pm.environment.set('CLOUD_CONVERSION_TOOL_API_TOKEN', jsonData.accessToken)
+    }
+})
+```
+
