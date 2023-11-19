@@ -58,10 +58,10 @@ class ConversionView(Resource):
         db.session.commit()
 
         #storing file
-        # storage_client = storage.Client()
-        # bucket = storage_client.get_bucket(config.CONVERSION_BUCKET)
-        # blob = bucket.blob('input/'+str(conversion.id)+file.filename)
-        # blob.upload_from_file(file)
+        storage_client = storage.Client()
+        bucket = storage_client.get_bucket(config.CONVERSION_BUCKET)
+        blob = bucket.blob('input/'+str(conversion.id)+file.filename)
+        blob.upload_from_file(file)
 
         try:
             message = {
