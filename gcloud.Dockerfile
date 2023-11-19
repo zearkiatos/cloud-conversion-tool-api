@@ -8,6 +8,8 @@ RUN gcloud config set project miso-cloud-solutions-for-test
 
 RUN gcloud services enable pubsub.googleapis.com
 
+RUN gcloud components install pubsub-emulator
+
 EXPOSE 8085
 
 COPY ./docker /docker
