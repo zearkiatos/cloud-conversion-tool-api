@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "soluciones-cloud-2024-15",
+  "private_key_id": "a6e6326bc9443fd77a786a13713e2face1d6a45d",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC/7YJTvz7zuihh\nqDbROdhRlijjPbd6R2tSeJYJ85nzYzVx5lNFtu0D0OOlhk7oeSWCV6C2d1VWF2hx\nv76aB/TKKc16OCCfuEoHEh1nYSF6/BW2lxSLZlQ7nhNcp/AXBScphB1rFs1dD7Vp\nHlZhglkXSCPEq48ODOZ00pNYk6v5+tUhFf5K3SnffTlEEYRYS/xitWlmCKVSmnyt\nS5eOT2tIxwqtfq9jc8Wsxv5iVYeASNg+l2UqTItY4DhqfxZxAEBrQhykQSEc+yHZ\nWGQwPmA07wpIq9a1aJ91Clm7/7csaSf7gFXZBs3mBwvDo7F9PJ3L/llZESWZQIYs\niYvBLFdbAgMBAAECggEAGHDMwDtsxH7NS6UEg1+kDhJa10KcYyRFz3UZrjS+Qxc8\nJBVaP1jMap2m5QTrIYGOkZWfxVIBpPqgIJ7JTTYm1GO/Dd795eOtpvmF6GH0cIPk\n2Uv4oB6CKta2In4kUy94eDn3Fmm18dw2lCdP2rpNpsBXWwvPJiaQZl9hHM4uqqDa\nMtylWhlQz1XnUiS+N6LYRTTFkWMOJF9XQSnwa9nA8t8qo4ePcH7W2PIhsDEVt607\n5EERbZg/VrYF5MG/YJoDbL3uwdv7eoabgcJUljdZQ0VsuY35vKR/hx5b8R03iMc9\nD9C3OYu9ZW9SoNzkOV54f/dqWCqmg41FFk01ObF4WQKBgQDz34q9v6QsBcAN5AZ/\nCiq4Cm5VBkDSgyz7Ot31zqkxqQUhfh1ONzcLRneJQOmR3uuuc5AbYjaFxJRT29S4\n6DUbQYd0aUr37k5ez2veOdLkNSwcEiYh2RLca8W0xSOeelLBD9+USX/Ux02Xs7gq\nzKi/8pGgMFMfHsMz0e4uD1/i/QKBgQDJeLY9usdInYC4Z8LH/DoTS2nZ33B6BlyD\nXS9tHhISqyeXfMwGoUCVJZZt6X+nxnixDZf1mbIOKMK6ZY1VNfho66SbdKNHKAFu\n2J/l0ws2eK4aQyjA5ZduUyA2Ghw3mGjcOopCmcYNVuXzNoNfesihhPhLHItPPh5K\n6cQ1WajPNwKBgGekPQZfB5pd5z0AB3K+E2GbrUAdJDdS4C702Ze5eFZOioutWS8A\ncDgufmaqW5lOr8K4AiphFuLKpG7vIfxjUw5+Tt6+UMoFUPEiHamX0XSC1HgpjmMc\nKdPbSW6FyZl0Su8Zm98dTWJUQTmTe1VVHPJWWGVHpEu5eyPut9aDWjDRAoGAAyBd\na53PY+AV1Ea/7gyK9iuwa9Ic07fvjZZPmxjhXOrNBXvJSr0L3ISlzfTWp0rcKps0\nZXpKGhAl3XCf/deFkFM/za3EruD/DLJN4OoifWjoAr5SDpRBglPF5zEGiRJTZj9+\nT8RFH4XesaSB62RjYqZGmBvMSaGEJNN12QIYLYcCgYBBS6hIXx5dS3Vbq+GgY9qD\nfQAIF+jjmI1AhWFctZIhvGx/xtr5DLDHU9UpV+KFfuxgFYuk8XD+qtkIJLAy/uHJ\n0a8xU4Laa/EposplWfjqFMagfISaPL/tT5L6Z5nc4vdOS8SXRzsH6TkkLuunT1HW\n8pIyh18TbOODvpb1q/PsXg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "cloud-service-account-conversi@soluciones-cloud-2024-15.iam.gserviceaccount.com",
+  "client_id": "117362672589279743496",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cloud-service-account-conversi%40soluciones-cloud-2024-15.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

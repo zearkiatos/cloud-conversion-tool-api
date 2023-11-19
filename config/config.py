@@ -20,6 +20,9 @@ class Config:
     APP_URL=os.getenv('APP_URL')
     CONVERSION_BUCKET=os.getenv('CONVERSION_BUCKET')
     BUCKET_URL=os.getenv('BUCKET_URL')
+    GOOGLE_PROJECT_ID=os.getenv('GOOGLE_PROJECT_ID')
+    SUBSCRIPTION_NAME = os.getenv('SUBSCRIPTION_NAME')
+    GOOGLE_PUB_SUB_CREDENTIALS=os.getenv('GOOGLE_PUB_SUB_CREDENTIALS')
     TOPICS = {
         'TASK_POSTED': os.getenv('TOPIC_TASK_POSTED')
     }
