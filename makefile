@@ -16,8 +16,14 @@ docker-down:
 docker-dev-up:
 	docker compose -f=docker-compose.develop.yml up --build
 
+docker-pubsub-down:
+	docker exec -it gcloud-pubsub-queue gcloud pubsub topics delete task-convert
+	docker exec -it gcloud-pubsub-queue gcloud pubsub subscriptions delete task-convert-subscription
+
 docker-dev-down:
+	make docker-pubsub-down
 	docker compose -f=docker-compose.develop.yml down
+
 
 run-docker:
 ifeq ($(strip $(port)),)

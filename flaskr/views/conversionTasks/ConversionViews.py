@@ -1,4 +1,5 @@
 import json
+import asyncio
 import os
 from flask_restful import Resource
 from flask import jsonify, request,send_file
@@ -6,11 +7,12 @@ import requests
 from http import HTTPStatus
 from  config import Config
 from ...dataContext import db
-from ...producer.queueProducer import task_posted
+from ...producer.pubsub.queueProducerByApi import publish_message
 from ...models.conversion import Conversion,VideoFormats,ConversionSchema
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
 from enum import Enum
 from google.cloud import storage
+from config import Config
 
 
 config = Config()
@@ -56,24 +58,24 @@ class ConversionView(Resource):
         db.session.commit()
 
         #storing file
-        storage_client = storage.Client()
-        bucket = storage_client.get_bucket(config.CONVERSION_BUCKET)
-        blob = bucket.blob('input/'+str(conversion.id)+file.filename)
-        blob.upload_from_file(file)
+        # storage_client = storage.Client()
+        # bucket = storage_client.get_bucket(config.CONVERSION_BUCKET)
+        # blob = bucket.blob('input/'+str(conversion.id)+file.filename)
+        # blob.upload_from_file(file)
 
-        
         try:
-            args = ({
+            message = {
                 "id":str(conversion.id),
                 "fileName":file.filename,
                 "newFormat":str(newFormat),
                 "userId":conversion.user
-            },)
+            }
+            publish_message(config.GOOGLE_PROJECT_ID, config.TOPICS['TASK_POSTED'],message)
+
         except Exception as ex:
             return {
                 "message": f'error: {str(ex)}' 
             }, HTTPStatus.INTERNAL_SERVER_ERROR
-        task_posted.apply_async(args)
         return {"id":str(conversion.id), "message": "Conversion task in progress, please check in some minutes"}, HTTPStatus.OK
     
 

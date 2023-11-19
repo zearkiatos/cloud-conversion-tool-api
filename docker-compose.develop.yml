@@ -27,10 +27,12 @@ services:
       - broker
       - db
       - auth-db
+      - pubsub
     links:
       - broker
       - db
       - auth-db
+      - pubsub
   db:
     image: postgres
     env_file:
@@ -70,10 +72,12 @@ services:
       - broker
       - auth-db
       - formatter-api
+      - pubsub
     links:
       - broker
       - auth-db
       - formatter-api
+      - pubsub
   postgres-ui:
     image: dpage/pgadmin4
     env_file:
@@ -87,5 +91,18 @@ services:
       - db
     links:
       - db
+  pubsub:
+    build:
+      context: .
+      dockerfile: gcloud.Dockerfile
+    env_file:
+      - .gcloud.env
+    container_name: gcloud-pubsub-queue
+    volumes:
+      - ./key/service-account-key.json:/key/service-account-key.json
+    ports:
+      - "8085:8085"
+    entrypoint: ["sh", "./docker/dev.topic.sh"]
+    tty: true
 volumes:
   file_storage:

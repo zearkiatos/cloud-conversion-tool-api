@@ -10,7 +10,7 @@ services:
       - ".:/app"
       - "./videos:/app/videos"
     env_file:
-      - .env.dev
+      - .env.lab
     tty: true
   server:
     build:
